@@ -584,19 +584,6 @@ sum over window ÷ mean touch size
       <span style="margin-left:6px;">values shown in every cell, so colour is never the only signal</span>
     </div>
 
-    <h4>What it shows</h4>
-    <div class="scroll">
-      <table>
-        <thead><tr><th>Pair</th><th class="num">r</th><th>Reading</th></tr></thead>
-        <tbody>
-          <tr class="hi"><td class="mono">dmid 30s &harr; ofi 30s</td><td class="num">+0.82</td><td>The strongest pair left. Sustained order flow is what moved the price over the same window, so the two travel together &mdash; but far less at the short window (r = 0.50 at 1s), which is why all three windows earn their place.</td></tr>
-          <tr><td class="mono">imbal &harr; shr_ask</td><td class="num">&minus;0.78</td><td>A thin ask queue both raises imbalance and lowers the ask's share of its own depth. Two views of one situation.</td></tr>
-          <tr><td class="mono">imbal &harr; shr_bid</td><td class="num">+0.63</td><td>The mirror of the above, weaker because bid depth is less concentrated at the touch.</td></tr>
-          <tr><td class="mono">spread &harr; anything</td><td class="num">&lt; 0.2</td><td>Spread is close to independent of everything else &mdash; it carries information the queue measures do not.</td></tr>
-        </tbody>
-      </table>
-    </div>
-
     <h4>Variance inflation factors</h4>
     <div class="scroll">
       <table>
@@ -611,12 +598,6 @@ sum over window ÷ mean touch size
       </table>
     </div>
 
-    <div class="note">
-      <div class="t">One feature was removed on this evidence</div>
-      <p>An earlier version also carried the size-weighted micro-price offset. It is algebraically <em>(spread / 2) &times; imbalance</em>, and since the spread is one tick for most of the session the two correlated at <strong>0.99</strong>, with VIFs above 50. The fit responded exactly as collinearity predicts: it gave imbalance +0.12 and the micro-price &minus;0.06, two large opposing coefficients that partly cancelled and were impossible to read on their own.</p>
-      <p>Dropping it cost <strong>0.001 of out-of-sample IC</strong> &mdash; and sign accuracy went <em>up</em>. Imbalance's coefficient settled to a single clean +0.063, and the regression's condition number fell from <strong>18.7 to 5.15</strong>. What is left is mild collinearity that ridge absorbs comfortably.</p>
-      <p class="small" style="margin-top:8px;">It also explains an oddity below: <code>ofi</code> correlates with the target at only 0.02&ndash;0.03 on its own, yet is strongly significant in the fit. It adds information <em>conditional on</em> imbalance rather than on its own.</p>
-    </div>
   </section>
 
 
