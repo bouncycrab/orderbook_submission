@@ -1,0 +1,12 @@
+name: qt
+channels:
+  - conda-forge
+dependencies:
+  # Python 3.11 or newer: the book engine uses StrEnum.
+  - python=3.11
+  - numpy
+  - pandas
+  - scipy            # Spearman rank correlation in evaluation
+  - scikit-learn     # StandardScaler, RidgeCV
+  - sortedcontainers # SortedDict backing each price ladder
+  - pytest

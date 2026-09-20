@@ -1,0 +1,7 @@
+# Python 3.11 or newer required (the book engine uses StrEnum).
+numpy
+pandas
+scipy
+scikit-learn
+sortedcontainers
+pytest

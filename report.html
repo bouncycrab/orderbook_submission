@@ -1,0 +1,779 @@
+<title>Book to Signal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #F6F7F9; --surface: #FFFFFF; --surface-2: #EDF0F4;
+    --ink: #171B24; --ink-2: #495264; --ink-3: #798397;
+    --rule: #DCE0E8; --rule-strong: #C3C9D6;
+    --accent: #2A4B9B; --accent-soft: #E6ECF8;
+    --bid: #14705A; --ask: #A8323F;
+    --bid-soft: #E0F0EA; --ask-soft: #F8E4E6;
+    --amber: #8A6212; --amber-soft: #FBF0D9;
+
+    --measure: 66ch;
+    --s--1: 0.8125rem; --s-0: 1rem; --s-1: 1.1875rem;
+    --s-2: 1.5rem; --s-3: 2rem; --s-4: 2.6rem;
+
+    --sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --serif: "Spectral", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0E1118; --surface: #151922; --surface-2: #1C2130;
+      --ink: #E6EAF2; --ink-2: #AEB7C7; --ink-3: #7B8599;
+      --rule: #29303F; --rule-strong: #3A4356;
+      --accent: #84A4EC; --accent-soft: #19223C;
+      --bid: #49B795; --ask: #E37C8A;
+      --bid-soft: #12271F; --ask-soft: #2A171B;
+      --amber: #D6A94A; --amber-soft: #241D0E;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0E1118; --surface: #151922; --surface-2: #1C2130;
+    --ink: #E6EAF2; --ink-2: #AEB7C7; --ink-3: #7B8599;
+    --rule: #29303F; --rule-strong: #3A4356;
+    --accent: #84A4EC; --accent-soft: #19223C;
+    --bid: #49B795; --ask: #E37C8A;
+    --bid-soft: #12271F; --ask-soft: #2A171B;
+    --amber: #D6A94A; --amber-soft: #241D0E;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: var(--sans); font-size: var(--s-0); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { width: 100%; max-width: 1060px; margin: 0 auto; padding-inline: 20px; padding-block: 0 80px; }
+  .col { max-width: var(--measure); }
+
+  h1, h2, h3 { font-family: var(--serif); text-wrap: balance; margin: 0; }
+  p { margin: 0 0 1em; color: var(--ink-2); }
+  p strong, li strong { color: var(--ink); font-weight: 600; }
+  ul { margin: 0 0 1em; padding-left: 1.1em; color: var(--ink-2); }
+  li { margin-bottom: 0.4em; }
+  code { font-family: var(--mono); font-size: 0.875em; background: var(--surface-2); padding: 0.1em 0.34em; border-radius: 3px; color: var(--ink); }
+  .small { font-size: var(--s--1); }
+
+  header.masthead { padding-block: 56px 36px; border-bottom: 2px solid var(--ink); }
+  .eyebrow { font-family: var(--mono); font-size: var(--s--1); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0 0 16px; }
+  h1 { font-size: var(--s-4); font-weight: 700; line-height: 1.06; letter-spacing: -0.015em; margin-bottom: 20px; }
+  .parts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 620px; }
+  @media (max-width: 560px) { .parts { grid-template-columns: 1fr; } }
+  .pcard { border-left: 3px solid var(--accent); padding-left: 14px; }
+  .pcard .pl { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
+  .pcard .pt { font-family: var(--serif); font-size: var(--s-1); color: var(--ink); font-weight: 600; }
+  .facts { display: flex; flex-wrap: wrap; gap: 0 32px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: var(--s--1); font-variant-numeric: tabular-nums; }
+  .facts div { color: var(--ink-3); }
+  .facts b { display: block; color: var(--ink); font-weight: 500; font-size: var(--s-0); }
+
+  .part { display: flex; align-items: baseline; gap: 18px; margin-top: 56px; padding-bottom: 14px; border-bottom: 2px solid var(--accent); }
+  .part .n { font-family: var(--mono); font-size: var(--s--1); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); flex: none; }
+  .part h2 { font-size: var(--s-3); font-weight: 700; letter-spacing: -0.012em; line-height: 1.15; }
+  .part .sub { margin-left: auto; font-size: var(--s--1); color: var(--ink-3); text-align: right; }
+
+  section { padding-block: 36px; border-bottom: 1px solid var(--rule); }
+  section:last-of-type { border-bottom: 0; }
+  h3 { font-size: var(--s-2); font-weight: 600; letter-spacing: -0.008em; margin-bottom: 14px; line-height: 1.2; }
+  h4 { font-family: var(--sans); font-size: var(--s-0); font-weight: 600; color: var(--ink); margin: 26px 0 10px; }
+
+  /* ---- flow chart ---- */
+  .flow { margin: 24px 0; display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .fnode {
+    background: var(--surface); border: 1px solid var(--rule-strong); padding: 11px 18px;
+    font-family: var(--mono); font-size: var(--s--1); color: var(--ink); text-align: center;
+    max-width: 100%; line-height: 1.45;
+  }
+  .fnode.io { background: var(--accent-soft); border-color: var(--accent); }
+  .fnode small { display: block; font-family: var(--sans); font-size: 0.72rem; color: var(--ink-3); margin-top: 3px; }
+  .farrow { width: 1px; height: 18px; background: var(--rule-strong); position: relative; }
+  .farrow::after {
+    content: ""; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 6px solid var(--rule-strong);
+  }
+  .fbranch { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; margin: 4px 0; }
+  @media (max-width: 720px) { .fbranch { grid-template-columns: 1fr; } }
+  .fcase { border: 1px solid var(--rule-strong); background: var(--surface); }
+  .fcase .ch { padding: 8px 12px; font-family: var(--mono); font-size: var(--s--1); font-weight: 600; border-bottom: 1px solid var(--rule); }
+  .fcase.add .ch { color: var(--bid); background: var(--bid-soft); }
+  .fcase.mod .ch { color: var(--amber); background: var(--amber-soft); }
+  .fcase.del .ch { color: var(--ask); background: var(--ask-soft); }
+  .fcase .cb { padding: 10px 12px; font-family: var(--mono); font-size: 0.74rem; line-height: 1.75; color: var(--ink-2); }
+  .fcase .cb b { color: var(--ink); font-weight: 500; }
+  .fcase .cb em { color: var(--accent); font-style: normal; }
+
+  /* ---- tables ---- */
+  .scroll { overflow-x: auto; margin: 20px 0; }
+  table { border-collapse: collapse; width: 100%; min-width: 420px; font-size: var(--s--1); font-variant-numeric: tabular-nums; }
+  th { text-align: left; font-weight: 500; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); padding: 0 14px 8px 0; border-bottom: 1px solid var(--rule-strong); white-space: nowrap; }
+  td { padding: 8px 14px 8px 0; border-bottom: 1px solid var(--rule); color: var(--ink-2); vertical-align: top; }
+  td:first-child { color: var(--ink); }
+  td.num, th.num { text-align: right; font-family: var(--mono); padding-right: 0; }
+  td.num { color: var(--ink); }
+  tr.hi td { background: var(--accent-soft); color: var(--ink); font-weight: 500; }
+  .mono { font-family: var(--mono); }
+  .pos { color: var(--bid); font-weight: 500; }
+  .neg { color: var(--ask); font-weight: 500; }
+
+  .code { background: var(--surface); border: 1px solid var(--rule-strong); border-left: 3px solid var(--accent); padding: 16px 18px; margin: 18px 0; font-family: var(--mono); font-size: var(--s--1); line-height: 1.65; overflow-x: auto; color: var(--ink); white-space: pre; }
+  .code .c { color: var(--ink-3); }
+  .code .k { color: var(--accent); }
+  .code .t { color: var(--bid); }
+  .code-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 22px 0 -8px; }
+
+  .struct { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 22px 0; }
+  @media (max-width: 720px) { .struct { grid-template-columns: 1fr; } }
+  .sbox { border: 1px solid var(--rule-strong); background: var(--surface); padding: 15px 16px; }
+  .sbox .h { font-family: var(--mono); font-size: var(--s--1); color: var(--ink); font-weight: 500; padding-bottom: 8px; margin-bottom: 10px; border-bottom: 1px solid var(--rule); }
+  .sbox .rows { font-family: var(--mono); font-size: 0.76rem; line-height: 1.9; font-variant-numeric: tabular-nums; }
+  .sbox .rows div { display: flex; justify-content: space-between; gap: 10px; }
+  .sbox .rows .px { color: var(--ink-2); }
+  .sbox .rows .q { color: var(--ink); }
+  .sbox.bidbox .h { color: var(--bid); }
+  .sbox.askbox .h { color: var(--ask); }
+  .sbox .why { font-size: 0.76rem; color: var(--ink-3); margin-top: 12px; line-height: 1.5; font-family: var(--sans); }
+
+  .exhibit { background: var(--surface); border: 1px solid var(--rule-strong); padding: 22px; margin: 24px 0; }
+  .ex-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 16px; }
+  .snapshots { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 620px) { .snapshots { grid-template-columns: 1fr; } }
+  .snap { border: 1px solid var(--rule); background: var(--ground); }
+  .snap-head { padding: 10px 13px; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .snap-head b { font-family: var(--mono); font-size: var(--s--1); color: var(--ink); }
+  .snap-head span { font-family: var(--mono); font-size: 0.68rem; color: var(--ink-3); }
+  .ladder { padding: 11px 13px; }
+  .lvl { display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 9px; padding: 4px 7px; font-family: var(--mono); font-size: var(--s--1); font-variant-numeric: tabular-nums; }
+  .lvl.ask { background: var(--ask-soft); }
+  .lvl.bid { background: var(--bid-soft); }
+  .lvl .tag { font-size: 0.64rem; letter-spacing: 0.06em; }
+  .lvl.ask .tag { color: var(--ask); }
+  .lvl.bid .tag { color: var(--bid); }
+  .lvl .px { color: var(--ink); font-weight: 500; }
+  .lvl .qty { color: var(--ink-2); }
+  .midline { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 7px; margin: 3px 0; border-top: 1px dashed var(--rule-strong); border-bottom: 1px dashed var(--rule-strong); font-family: var(--mono); font-size: var(--s--1); }
+  .midline span { color: var(--ink-3); font-size: 0.68rem; letter-spacing: 0.06em; }
+  .midline b { color: var(--accent); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .arith { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--rule); font-family: var(--mono); font-size: var(--s--1); font-variant-numeric: tabular-nums; }
+  .arith div { display: flex; justify-content: space-between; gap: 14px; padding: 5px 0; color: var(--ink-2); }
+  .arith div b { color: var(--ink); font-weight: 500; }
+  .arith div.total { border-top: 1px solid var(--rule-strong); margin-top: 5px; padding-top: 11px; font-size: var(--s-0); }
+  .arith div.total b { color: var(--accent); }
+
+  .formula { background: var(--surface); border-left: 3px solid var(--accent); padding: 18px 20px; margin: 22px 0; font-family: var(--mono); font-size: var(--s-1); color: var(--ink); overflow-x: auto; }
+  .formula small { display: block; margin-top: 10px; font-family: var(--sans); font-size: var(--s--1); color: var(--ink-3); line-height: 1.5; }
+
+  .feats { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 12px; margin: 22px 0; }
+  .feat { background: var(--surface); border: 1px solid var(--rule-strong); padding: 15px 16px; }
+  .feat .fname { font-family: var(--mono); font-size: var(--s--1); color: var(--accent); font-weight: 500; margin-bottom: 4px; }
+  .feat .fwhat { font-size: 0.8rem; color: var(--ink-2); line-height: 1.5; margin-bottom: 11px; }
+  .feat .fcalc { font-family: var(--mono); font-size: 0.78rem; line-height: 1.8; font-variant-numeric: tabular-nums; background: var(--ground); border: 1px solid var(--rule); padding: 9px 11px; color: var(--ink-2); overflow-x: auto; white-space: pre; }
+  .feat .fcalc .r { color: var(--accent); font-weight: 600; }
+  .feat .fmeans { font-size: 0.76rem; color: var(--ink-3); margin-top: 9px; line-height: 1.5; }
+
+  .note { background: var(--surface-2); border: 1px solid var(--rule); padding: 16px 18px; margin: 22px 0; }
+  .note p:last-child { margin-bottom: 0; }
+  .note .t { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 7px; }
+  .note.amber { background: var(--amber-soft); border-color: var(--amber); }
+  .note.amber .t { color: var(--amber); }
+
+  .hist { margin: 20px 0; display: flex; flex-direction: column; gap: 4px; }
+  .hrow { display: grid; grid-template-columns: 52px 1fr 58px; align-items: center; gap: 11px; font-family: var(--mono); font-size: var(--s--1); font-variant-numeric: tabular-nums; }
+  .hrow .lab { text-align: right; color: var(--ink-2); }
+  .hrow .cnt { color: var(--ink-3); font-size: 0.72rem; }
+  .bar { height: 14px; background: var(--accent); opacity: 0.85; min-width: 2px; }
+  .hrow.zero .bar { background: var(--ink-3); }
+  .hrow.zero .lab { color: var(--ink); font-weight: 500; }
+
+  .funnel { display: flex; flex-direction: column; gap: 6px; margin: 20px 0; }
+  .frow { display: grid; grid-template-columns: 112px 1fr 74px; align-items: center; gap: 12px; font-family: var(--mono); font-size: var(--s--1); font-variant-numeric: tabular-nums; }
+  .frow .flab { color: var(--ink-2); text-align: right; font-size: 0.76rem; }
+  .frow .fbar { height: 20px; background: var(--accent); opacity: 0.8; min-width: 2px; }
+  .frow.all .fbar { background: var(--ink-3); }
+  .frow .fval { color: var(--ink); font-size: 0.78rem; }
+
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin: 22px 0; }
+  .metric { background: var(--surface); padding: 15px 16px; }
+  .metric .v { font-family: var(--mono); font-size: var(--s-2); color: var(--ink); font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .metric .k { font-size: 0.73rem; color: var(--ink-3); margin-top: 5px; line-height: 1.35; }
+  .metric.warn .v { color: var(--ask); }
+
+  .decile { margin: 22px 0; }
+  .dgrid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; align-items: end; height: 132px; }
+  .dcol { display: flex; flex-direction: column; justify-content: flex-end; height: 100%; }
+  .dbar { width: 100%; }
+  .dbar.pos { background: var(--bid); }
+  .dbar.neg { background: var(--ask); }
+  .dzero { border-top: 1px solid var(--rule-strong); }
+  .dlabels { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin-top: 7px; font-family: var(--mono); font-size: 0.64rem; color: var(--ink-3); text-align: center; }
+  .caption { font-size: var(--s--1); color: var(--ink-3); margin-top: 12px; line-height: 1.5; }
+
+  /* ---- correlation matrix: diverging, two hues either side of a neutral ---- */
+  .corr { border-collapse: separate; border-spacing: 2px; min-width: 620px; width: auto; }
+  .corr th, .corr td { border: 0; padding: 0; }
+  .corr th.cx {
+    font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0; text-transform: none;
+    color: var(--ink-3); text-align: center; padding: 0 0 6px; white-space: nowrap;
+    writing-mode: vertical-rl; transform: rotate(180deg); height: 58px; vertical-align: bottom;
+  }
+  .corr th.cy {
+    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0; text-transform: none;
+    color: var(--ink-2); text-align: right; padding-right: 9px; white-space: nowrap; width: 1%;
+  }
+  .corr td {
+    width: 46px; height: 28px; text-align: center; font-family: var(--mono);
+    font-size: 0.68rem; font-variant-numeric: tabular-nums; color: var(--ink);
+  }
+  .corr td.ccblank { background: none; }
+  .corr td.ccdiag { background: var(--surface-2); color: var(--ink-3); }
+  .corr td.cc0 { background: var(--surface-2); color: var(--ink-3); }
+  .cc-p1 { background: #FAF2E0; } .cc-p2 { background: #F1E1B6; }
+  .cc-p3 { background: #E6CB88; } .cc-p4 { background: #D6B252; }
+  .cc-n1 { background: #EAEFF9; } .cc-n2 { background: #D3DDF1; }
+  .cc-n3 { background: #B2C3E4; } .cc-n4 { background: #8AA3D5; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .cc-p1 { background: #272113; }
+    :root:not([data-theme="light"]) .cc-p2 { background: #392F18; }
+    :root:not([data-theme="light"]) .cc-p3 { background: #53431D; }
+    :root:not([data-theme="light"]) .cc-p4 { background: #766026; }
+    :root:not([data-theme="light"]) .cc-n1 { background: #191F33; }
+    :root:not([data-theme="light"]) .cc-n2 { background: #212B49; }
+    :root:not([data-theme="light"]) .cc-n3 { background: #2C3A63; }
+    :root:not([data-theme="light"]) .cc-n4 { background: #3B5084; }
+  }
+  :root[data-theme="dark"] .cc-p1 { background: #272113; }
+  :root[data-theme="dark"] .cc-p2 { background: #392F18; }
+  :root[data-theme="dark"] .cc-p3 { background: #53431D; }
+  :root[data-theme="dark"] .cc-p4 { background: #766026; }
+  :root[data-theme="dark"] .cc-n1 { background: #191F33; }
+  :root[data-theme="dark"] .cc-n2 { background: #212B49; }
+  :root[data-theme="dark"] .cc-n3 { background: #2C3A63; }
+  :root[data-theme="dark"] .cc-n4 { background: #3B5084; }
+
+  .scale { display: flex; align-items: center; gap: 8px; margin: 14px 0 0; font-family: var(--mono); font-size: 0.68rem; color: var(--ink-3); flex-wrap: wrap; }
+  .scale .sw { display: flex; }
+  .scale .sw span { width: 26px; height: 13px; }
+
+  .plot { margin: 20px 0; display: flex; justify-content: flex-start; }
+  .plot svg { font-variant-numeric: tabular-nums; }
+  .pl-panel { fill: var(--surface); stroke: var(--rule); stroke-width: 1; }
+  .pl-grid  { stroke: var(--rule); stroke-width: 1; }
+  .pl-grid0 { stroke: var(--rule-strong); stroke-width: 1; }
+  .pl-ref   { stroke: var(--ink-3); stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .pl-err   { stroke: var(--rule-strong); stroke-width: 1.5; }
+  .pl-dot   { stroke: var(--surface); stroke-width: 2; }
+  .pl-dot.pos { fill: var(--bid); }
+  .pl-dot.neg { fill: var(--ask); }
+  .pl-tick  { fill: var(--ink-3); font-size: 9px; font-family: var(--mono); }
+  .pl-axis  { fill: var(--ink-2); font-size: 10px; font-family: var(--sans); }
+
+  .steps { counter-reset: st; margin: 20px 0; display: flex; flex-direction: column; gap: 10px; }
+  .step { display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: start; }
+  .step .sn { counter-increment: st; font-family: var(--mono); font-size: 0.74rem; color: var(--accent); border: 1px solid var(--accent); width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+  .step .sn::before { content: counter(st); }
+  .step .sx { font-size: var(--s--1); color: var(--ink-2); line-height: 1.55; padding-top: 2px; }
+
+  .layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 22px 0; align-items: start; }
+  @media (max-width: 680px) { .layout { grid-template-columns: 1fr; } }
+
+  footer { padding-block: 34px 0; border-top: 2px solid var(--ink); margin-top: 18px; font-size: var(--s--1); color: var(--ink-3); font-family: var(--mono); }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <p class="eyebrow">Order book reconstruction &amp; signal research</p>
+    <h1>From order updates to a mid-price signal</h1>
+    <div class="parts">
+      <div class="pcard"><div class="pl">Part 1</div><div class="pt">Building the order book</div></div>
+      <div class="pcard"><div class="pl">Part 2</div><div class="pt">Predictive signals</div></div>
+    </div>
+    <div class="facts">
+      <div>Updates<b>1,180,065</b></div>
+      <div>Days<b>5</b></div>
+      <div>Tick<b>5</b></div>
+      <div>Features<b>10</b></div>
+      <div>OOS IC<b>0.260</b></div>
+      <div>Files<b>18</b></div>
+    </div>
+  </header>
+
+  <!-- ============ PART ONE ============ -->
+  <div class="part">
+    <div class="n">Part One</div>
+    <h2>Building the order book</h2>
+    <div class="sub">1.18M rows &middot; 8.5s</div>
+  </div>
+
+  <section>
+    <h3>How one update becomes one output row</h3>
+
+    <div class="flow">
+      <div class="fnode io">res_20190610.csv<small>raw order updates, one per row</small></div>
+      <div class="farrow"></div>
+      <div class="fnode">OrderUpdate(timestamp, side, action, id, price, quantity)<small>parsed once at the boundary &mdash; nothing downstream sees raw text</small></div>
+      <div class="farrow"></div>
+      <div class="fnode">key = (side, id) &rarr; look up live_orders<small>ids repeat across sides, so the key must be a pair</small></div>
+      <div class="farrow"></div>
+
+      <div class="fbranch">
+        <div class="fcase add">
+          <div class="ch">action = a &nbsp;&middot;&nbsp; ADD</div>
+          <div class="cb"><b>ladder.add</b>(price, qty)
+<em>live_orders[key] = Order</em>
+
+<span style="color:var(--ink-3)">brand new order joins
+the level</span></div>
+        </div>
+        <div class="fcase mod">
+          <div class="ch">action = m &nbsp;&middot;&nbsp; MODIFY</div>
+          <div class="cb">old = <em>live_orders[key]</em>
+<b>ladder.remove</b>(old.price, old.qty)
+<b>ladder.add</b>(price, qty)
+<em>live_orders[key] = Order</em>
+
+<span style="color:var(--ink-3)">unwind, then re-apply &mdash;
+the order may have moved</span></div>
+        </div>
+        <div class="fcase del">
+          <div class="ch">action = d &nbsp;&middot;&nbsp; DELETE</div>
+          <div class="cb">old = <em>live_orders.pop(key)</em>
+<b>ladder.remove</b>(old.price, old.qty)
+
+<span style="color:var(--ink-3)">the row's own price is
+ignored &mdash; use what we
+remembered</span></div>
+        </div>
+      </div>
+
+      <div class="farrow"></div>
+      <div class="fnode">bids.top_levels(5) &nbsp;&middot;&nbsp; asks.top_levels(5)</div>
+      <div class="farrow"></div>
+      <div class="fnode">pad absent levels to quantity 0<small>a format concern, so it lives in the writer &mdash; not in the book</small></div>
+      <div class="farrow"></div>
+      <div class="fnode io">book_20190610.csv<small>one row out per row in, 23 columns</small></div>
+    </div>
+
+    <div class="note amber">
+      <div class="t">Why the middle branch is the whole problem</div>
+      <p>A <code>delete</code> or <code>modify</code> row gives the order's <strong>new</strong> state. It never says which price level that order is <em>currently</em> sitting on. Without <code>live_orders</code> remembering it, a modify that moves an order between prices would subtract quantity from the wrong level &mdash; and every row after it would be silently wrong.</p>
+    </div>
+  </section>
+
+  <section>
+    <h3>Data structures, and why</h3>
+
+    <div class="struct">
+      <div class="sbox bidbox">
+        <div class="h">bids &middot; SortedDict</div>
+        <div class="rows">
+          <div><span class="px">10005</span><span class="q">26</span></div>
+          <div><span class="px">10000</span><span class="q">4</span></div>
+          <div><span class="px">9995</span><span class="q">31</span></div>
+          <div><span class="px">9990</span><span class="q">46</span></div>
+        </div>
+        <div class="why">Price &rarr; aggregate quantity. Read from the <em>high</em> end.</div>
+      </div>
+      <div class="sbox askbox">
+        <div class="h">asks &middot; SortedDict</div>
+        <div class="rows">
+          <div><span class="px">10010</span><span class="q">4</span></div>
+          <div><span class="px">10015</span><span class="q">9</span></div>
+          <div><span class="px">10020</span><span class="q">20</span></div>
+          <div><span class="px">10025</span><span class="q">48</span></div>
+        </div>
+        <div class="why">Same structure, read from the <em>low</em> end.</div>
+      </div>
+      <div class="sbox">
+        <div class="h">live_orders &middot; dict</div>
+        <div class="rows">
+          <div><span class="px">(b, 4821)</span><span class="q">10005&times;3</span></div>
+          <div><span class="px">(b, 4823)</span><span class="q">9995&times;12</span></div>
+          <div><span class="px">(a, 4821)</span><span class="q">10015&times;9</span></div>
+          <div><span class="px">(a, 4830)</span><span class="q">10020&times;7</span></div>
+        </div>
+        <div class="why">(side, id) &rarr; last known state. Note id 4821 live on <em>both</em> sides.</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Choice</th><th class="num">Cost</th><th>Why this and not the alternative</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="mono">SortedDict</td>
+            <td class="num">O(log n)</td>
+            <td>The book needs both keyed access (&ldquo;quantity at price X&rdquo;, for applying an update) and ordered access (&ldquo;best five&rdquo;, for the output). A plain dict gives only the first; a heap only the second. This gives both, and the top-5 read is O(5).</td>
+          </tr>
+          <tr>
+            <td class="mono">dict on (side, id)</td>
+            <td class="num">O(1)</td>
+            <td>Ids are unique per <em>(day, side)</em>, not globally &mdash; id 4821 can be a live bid and a live ask at the same time. A single-value key would collide and corrupt both sides.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- ============ PART TWO ============ -->
+  <div class="part">
+    <div class="n">Part Two</div>
+    <h2>Predictive signals</h2>
+    <div class="sub">27,489 fitting rows</div>
+  </div>
+
+
+  <section>
+    <h3>The target, and its horizon</h3>
+
+    <div class="formula">
+      y(t) = ( mid(t + h) &minus; mid(t) ) / 5
+      <small>The target is the <em>change</em>, not the level. mid is the average of best bid and best ask; the divisor is the tick size, so y is in ticks. The forward value is the mid <em>prevailing</em> at t + h &mdash; the last update at or before it, since updates arrive irregularly.</small>
+    </div>
+
+    <div class="exhibit">
+      <p class="ex-label">Real row &middot; 10 June 2019, 91.5s into the session, h = 5s</p>
+      <div class="snapshots">
+        <div class="snap">
+          <div class="snap-head"><b>t</b> <span>91,486,481 &micro;s</span></div>
+          <div class="ladder">
+            <div class="lvl ask"><span class="tag">ASK</span><span class="px">10010</span><span class="qty">4</span></div>
+            <div class="midline"><span>MID</span><b>10007.5</b></div>
+            <div class="lvl bid"><span class="tag">BID</span><span class="px">10005</span><span class="qty">26</span></div>
+          </div>
+        </div>
+        <div class="snap">
+          <div class="snap-head"><b>t + 5s</b> <span>94,438,013 &micro;s</span></div>
+          <div class="ladder">
+            <div class="lvl ask"><span class="tag">ASK</span><span class="px">10015</span><span class="qty">9</span></div>
+            <div class="midline"><span>MID</span><b>10010.0</b></div>
+            <div class="lvl bid"><span class="tag">BID</span><span class="px">10005</span><span class="qty">23</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="arith">
+        <div><span>Change in price units</span><b>10010.0 &minus; 10007.5 = +2.5</b></div>
+        <div><span>Divide by tick size</span><b>&divide; 5</b></div>
+        <div class="total"><span>Target y</span><b>+0.5 ticks</b></div>
+      </div>
+    </div>
+
+    <h4>Why h = 5 seconds</h4>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>h</th><th class="num">Rows</th><th class="num">R&sup2; vs zero</th><th class="num">Pearson IC</th><th class="num">Sign acc.</th><th class="num">Captured</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1s</td><td class="num">79,179</td><td class="num">0.046</td><td class="num">0.217</td><td class="num">81.0%</td><td class="num">0.036</td></tr>
+          <tr class="hi"><td class="mono">5s</td><td class="num">27,489</td><td class="num">0.066</td><td class="num">0.260</td><td class="num">77.4%</td><td class="num">0.072</td></tr>
+          <tr><td class="mono">10s</td><td class="num">15,460</td><td class="num">0.067</td><td class="num">0.262</td><td class="num">74.2%</td><td class="num">0.096</td></tr>
+          <tr><td class="mono">30s</td><td class="num">5,672</td><td class="num">0.050</td><td class="num">0.225</td><td class="num">66.7%</td><td class="num">0.129</td></tr>
+          <tr><td class="mono">60s</td><td class="num">2,912</td><td class="num">0.026</td><td class="num">0.166</td><td class="num">61.9%</td><td class="num">0.135</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="col small">Predictability peaks in the 5&ndash;10s band. <strong>5s and 10s are indistinguishable</strong> &mdash; 5s wins on sample size. Sign accuracy falls as h grows while captured move rises: longer is right less often, worth more when right.</p>
+  </section>
+
+  <section>
+    <h3>The ten features, calculated</h3>
+    <p class="col small">Every number below comes from one real row: bids <span class="mono">10005&times;26, 10000&times;4, 9995&times;31, 9990&times;46, 9985&times;44</span> &middot; asks <span class="mono">10010&times;4, 10015&times;9, 10020&times;20, 10025&times;48, 10030&times;45</span>.</p>
+
+    <div class="feats">
+      <div class="feat">
+        <div class="fname">spread_ticks</div>
+        <div class="fwhat">How much room there is to move.</div>
+        <div class="fcalc">(ap0 − bp0) / tick
+= (10010 − 10005) / 5
+= <span class="r">1.0</span></div>
+        <div class="fmeans">One tick wide &mdash; the tightest the book gets, and where it sits most of the day.</div>
+      </div>
+
+      <div class="feat">
+        <div class="fname">imbalance_touch</div>
+        <div class="fwhat">Relative size of the two front queues. The single most informative number in a one-tick book.</div>
+        <div class="fcalc">(bq0 − aq0) / (bq0 + aq0)
+= (26 − 4) / (26 + 4)
+= 22 / 30
+= <span class="r">+0.733</span></div>
+        <div class="fmeans">Runs −1 (all sellers) to +1 (all buyers). Here: heavily bid.</div>
+      </div>
+
+      <div class="feat">
+        <div class="fname">touch_share_bid</div>
+        <div class="fwhat">What fraction of the side's five-level depth sits at the front.</div>
+        <div class="fcalc">bq0 / (bq0+bq1+…+bq4)
+= 26 / (26+4+31+46+44)
+= 26 / 151
+= <span class="r">0.172</span></div>
+        <div class="fmeans">Only 17% at the touch &mdash; plenty of depth behind it.</div>
+      </div>
+
+      <div class="feat">
+        <div class="fname">touch_share_ask</div>
+        <div class="fwhat">Same for the sell side.</div>
+        <div class="fcalc">aq0 / (aq0+aq1+…+aq4)
+= 4 / (4+9+20+48+45)
+= 4 / 126
+= <span class="r">0.032</span></div>
+        <div class="fmeans">A very thin front queue &mdash; 3% of ask depth. Easily cleared, which is how the ask stepped up.</div>
+      </div>
+
+      <div class="feat">
+        <div class="fname">mid_change_1s / 5s / 30s</div>
+        <div class="fwhat">Realised drift, against the mid <em>prevailing</em> a window ago &mdash; not a fixed number of rows back.</div>
+        <div class="fcalc">(mid(t) − mid(t−30s)) / tick
+= (10007.5 − 10002.5) / 5
+= <span class="r">+1.0</span>   (30s window)
+
+1s and 5s windows: <span class="r">0.0</span></div>
+        <div class="fmeans">Up a full tick over 30s, flat over the last 5. All three coefficients are negative &mdash; short-horizon mean reversion.</div>
+      </div>
+
+      <div class="feat">
+        <div class="fname">ofi_1s / 5s / 30s</div>
+        <div class="fwhat">Net pressure at the touch. Buying interest arriving minus selling interest arriving, summed over the window. A price move counts the whole old queue as leaving and the whole new one as arriving.</div>
+        <div class="fcalc">per event, bid side:
+  price same → new size − old size
+  price up   → + new size
+  price down → − old size
+(ask side mirrored, then subtracted)
+
+sum over window ÷ mean touch size
+30s: <span class="r">+1.815</span>   1s: <span class="r">−0.033</span></div>
+        <div class="fmeans">Sustained buy pressure over 30s, flat over the last second. Dividing by typical touch size keeps it comparable between quiet and busy periods.</div>
+      </div>
+    </div>
+
+    <div class="note">
+      <div class="t">Twelve more were built, measured, deleted</div>
+      <p>Depth-weighted imbalance, log depth ratio, rolling volatility / event rate / cancel ratio at each window &mdash; all had coefficients near zero and five flipped sign between folds. The size-weighted micro-price offset went too, for the opposite reason: it correlated with touch imbalance at 0.99, and carrying both cost stability while buying 0.001 of out-of-sample IC.</p>
+    </div>
+  </section>
+
+  <section>
+    <h3>How correlated are the predictors?</h3>
+    <p class="col small">Pairwise correlation across the 27,489 fitting rows, lower triangle &mdash; after the redundant feature was removed. This is the evidence that drove that removal, and the reason the fit still uses ridge.</p>
+
+    <div class="scroll">
+      <table class="corr">
+      <thead><tr><th></th><th class="cx">spread</th><th class="cx">imbal</th><th class="cx">shr_bid</th><th class="cx">shr_ask</th><th class="cx">dmid 1s</th><th class="cx">dmid 5s</th><th class="cx">dmid 30s</th><th class="cx">ofi 1s</th><th class="cx">ofi 5s</th><th class="cx">ofi 30s</th></tr></thead>
+      <tbody>
+        <tr><th class="cy">spread</th><td class="ccdiag">1</td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td></tr>
+        <tr><th class="cy">imbal</th><td class="cc0">+0.01</td><td class="ccdiag">1</td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td></tr>
+        <tr><th class="cy">shr_bid</th><td class="cc0">+0.17</td><td class="cc-p3">+0.63</td><td class="ccdiag">1</td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td></tr>
+        <tr><th class="cy">shr_ask</th><td class="cc0">+0.14</td><td class="cc-n3">-0.78</td><td class="cc-n1">-0.25</td><td class="ccdiag">1</td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td></tr>
+        <tr><th class="cy">dmid 1s</th><td class="cc0">+0.03</td><td class="cc0">-0.17</td><td class="cc0">-0.13</td><td class="cc0">+0.13</td><td class="ccdiag">1</td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td></tr>
+        <tr><th class="cy">dmid 5s</th><td class="cc0">+0.01</td><td class="cc-n1">-0.26</td><td class="cc0">-0.18</td><td class="cc0">+0.19</td><td class="cc-p2">+0.41</td><td class="ccdiag">1</td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td></tr>
+        <tr><th class="cy">dmid 30s</th><td class="cc0">+0.01</td><td class="cc-n1">-0.26</td><td class="cc0">-0.18</td><td class="cc-p1">+0.21</td><td class="cc0">+0.16</td><td class="cc-p1">+0.38</td><td class="ccdiag">1</td><td class="ccblank"></td><td class="ccblank"></td><td class="ccblank"></td></tr>
+        <tr><th class="cy">ofi 1s</th><td class="cc0">-0.03</td><td class="cc0">+0.01</td><td class="cc0">+0.01</td><td class="cc0">-0.00</td><td class="cc-p2">+0.50</td><td class="cc-p1">+0.26</td><td class="cc0">+0.13</td><td class="ccdiag">1</td><td class="ccblank"></td><td class="ccblank"></td></tr>
+        <tr><th class="cy">ofi 5s</th><td class="cc0">-0.05</td><td class="cc0">+0.01</td><td class="cc0">+0.03</td><td class="cc0">+0.01</td><td class="cc-p1">+0.20</td><td class="cc-p3">+0.63</td><td class="cc-p1">+0.33</td><td class="cc-p1">+0.40</td><td class="ccdiag">1</td><td class="ccblank"></td></tr>
+        <tr><th class="cy">ofi 30s</th><td class="cc0">-0.05</td><td class="cc0">+0.01</td><td class="cc0">+0.05</td><td class="cc0">+0.01</td><td class="cc0">+0.08</td><td class="cc-p1">+0.26</td><td class="cc-p4">+0.82</td><td class="cc0">+0.15</td><td class="cc-p1">+0.38</td><td class="ccdiag">1</td></tr>
+      </tbody>
+      </table>
+    </div>
+
+    <div class="scale">
+      <span>&minus;1</span>
+      <span class="sw"><span class="cc-n4"></span><span class="cc-n3"></span><span class="cc-n2"></span><span class="cc-n1"></span><span style="background:var(--surface-2)"></span><span class="cc-p1"></span><span class="cc-p2"></span><span class="cc-p3"></span><span class="cc-p4"></span></span>
+      <span>+1</span>
+      <span style="margin-left:6px;">values shown in every cell, so colour is never the only signal</span>
+    </div>
+
+    <h4>What it shows</h4>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Pair</th><th class="num">r</th><th>Reading</th></tr></thead>
+        <tbody>
+          <tr class="hi"><td class="mono">dmid 30s &harr; ofi 30s</td><td class="num">+0.82</td><td>The strongest pair left. Sustained order flow is what moved the price over the same window, so the two travel together &mdash; but far less at the short window (r = 0.50 at 1s), which is why all three windows earn their place.</td></tr>
+          <tr><td class="mono">imbal &harr; shr_ask</td><td class="num">&minus;0.78</td><td>A thin ask queue both raises imbalance and lowers the ask's share of its own depth. Two views of one situation.</td></tr>
+          <tr><td class="mono">imbal &harr; shr_bid</td><td class="num">+0.63</td><td>The mirror of the above, weaker because bid depth is less concentrated at the touch.</td></tr>
+          <tr><td class="mono">spread &harr; anything</td><td class="num">&lt; 0.2</td><td>Spread is close to independent of everything else &mdash; it carries information the queue measures do not.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Variance inflation factors</h4>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Feature</th><th class="num">VIF</th><th>&nbsp;</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">imbalance_touch</td><td class="num">5.3</td><td>mild</td></tr>
+          <tr><td class="mono">mid_change_30s</td><td class="num">4.2</td><td>mild</td></tr>
+          <tr><td class="mono">ofi_30s</td><td class="num">4.0</td><td>mild</td></tr>
+          <tr><td class="mono">touch_share_ask</td><td class="num">3.4</td><td>fine</td></tr>
+          <tr><td class="mono">the other six</td><td class="num">&lt; 2.4</td><td>fine</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <div class="t">One feature was removed on this evidence</div>
+      <p>An earlier version also carried the size-weighted micro-price offset. It is algebraically <em>(spread / 2) &times; imbalance</em>, and since the spread is one tick for most of the session the two correlated at <strong>0.99</strong>, with VIFs above 50. The fit responded exactly as collinearity predicts: it gave imbalance +0.12 and the micro-price &minus;0.06, two large opposing coefficients that partly cancelled and were impossible to read on their own.</p>
+      <p>Dropping it cost <strong>0.001 of out-of-sample IC</strong> &mdash; and sign accuracy went <em>up</em>. Imbalance's coefficient settled to a single clean +0.063, and the regression's condition number fell from <strong>18.7 to 5.15</strong>. What is left is mild collinearity that ridge absorbs comfortably.</p>
+      <p class="small" style="margin-top:8px;">It also explains an oddity below: <code>ofi</code> correlates with the target at only 0.02&ndash;0.03 on its own, yet is strongly significant in the fit. It adds information <em>conditional on</em> imbalance rather than on its own.</p>
+    </div>
+  </section>
+
+
+  <section>
+    <h3>The model is a multiple linear regression</h3>
+    <p class="col small">Ten features, one continuous target, fitted with a least-squares linear model. The production fit adds an L2 (ridge) penalty because the features are collinear; alongside it an unpenalised OLS is fitted purely to read off standard errors and confidence intervals, which a penalised fit cannot give.</p>
+
+    <div class="code"><span class="c"># the signal — penalised, used for prediction</span>
+<span class="t">Pipeline</span>([(<span class="k">"scale"</span>, <span class="t">StandardScaler</span>()),
+          (<span class="k">"ridge"</span>, <span class="t">RidgeCV</span>(alphas=(0.1, 1, 10, 100, 1000)))])
+
+<span class="c"># the diagnostic — unpenalised, used for inference</span>
+standardised = (features - features.mean()) / features.std()
+<span class="t">sm</span>.OLS(target, <span class="t">sm</span>.add_constant(standardised)).fit().summary()</div>
+
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Feature</th><th class="num">coef</th><th class="num">std err</th><th class="num">t</th><th class="num">P&gt;|t|</th><th class="num">[0.025</th><th class="num">0.975]</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">const</td><td class="num">&minus;0.0011</td><td class="num">0.002</td><td class="num">&minus;0.55</td><td class="num">0.583</td><td class="num">&minus;0.005</td><td class="num">0.003</td></tr>
+          <tr class="hi"><td class="mono">imbalance_touch</td><td class="num">0.0631</td><td class="num">0.005</td><td class="num">13.54</td><td class="num">0.000</td><td class="num">0.054</td><td class="num">0.072</td></tr>
+          <tr><td class="mono">ofi_30s</td><td class="num">0.0285</td><td class="num">0.004</td><td class="num">7.09</td><td class="num">0.000</td><td class="num">0.021</td><td class="num">0.036</td></tr>
+          <tr><td class="mono">mid_change_30s</td><td class="num">&minus;0.0292</td><td class="num">0.004</td><td class="num">&minus;7.02</td><td class="num">0.000</td><td class="num">&minus;0.037</td><td class="num">&minus;0.021</td></tr>
+          <tr><td class="mono">mid_change_5s</td><td class="num">&minus;0.0275</td><td class="num">0.003</td><td class="num">&minus;8.96</td><td class="num">0.000</td><td class="num">&minus;0.033</td><td class="num">&minus;0.021</td></tr>
+          <tr><td class="mono">spread_ticks</td><td class="num">&minus;0.0226</td><td class="num">0.002</td><td class="num">&minus;10.65</td><td class="num">0.000</td><td class="num">&minus;0.027</td><td class="num">&minus;0.018</td></tr>
+          <tr><td class="mono">ofi_5s</td><td class="num">0.0181</td><td class="num">0.003</td><td class="num">5.98</td><td class="num">0.000</td><td class="num">0.012</td><td class="num">0.024</td></tr>
+          <tr><td class="mono">ofi_1s</td><td class="num">0.0162</td><td class="num">0.003</td><td class="num">6.36</td><td class="num">0.000</td><td class="num">0.011</td><td class="num">0.021</td></tr>
+          <tr><td class="mono">mid_change_1s</td><td class="num">&minus;0.0134</td><td class="num">0.003</td><td class="num">&minus;5.20</td><td class="num">0.000</td><td class="num">&minus;0.018</td><td class="num">&minus;0.008</td></tr>
+          <tr><td class="mono">touch_share_ask</td><td class="num">0.0111</td><td class="num">0.004</td><td class="num">3.00</td><td class="num">0.003</td><td class="num">0.004</td><td class="num">0.018</td></tr>
+          <tr><td class="mono">touch_share_bid</td><td class="num">0.0105</td><td class="num">0.003</td><td class="num">3.50</td><td class="num">0.000</td><td class="num">0.005</td><td class="num">0.016</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="col small">All ten are significant at the 5% level, nine at 0.1%; no confidence interval crosses zero except the intercept's, which is as it should be.</p>
+
+    <div class="note">
+      <div class="t">The number that validates the subsampling</div>
+      <p><strong>Durbin&ndash;Watson = 2.016.</strong> A value of 2 means no autocorrelation in the residuals &mdash; which is exactly what the thinning was for. Fitted on every row with overlapping targets, this would have come out near zero and every standard error above would be badly understated. It is the empirical proof that the sampling choice was the right one.</p>
+      <p class="small" style="margin-top:8px;">Kurtosis is 17.8, so the residuals are fat-tailed. The intervals above assume normality and are best read as indicative; robust standard errors would widen them somewhat without changing which features matter.</p>
+    </div>
+  </section>
+
+  <section>
+    <h3>Result, and how to read the decile chart</h3>
+
+    <div class="metrics">
+      <div class="metric"><div class="v">0.066</div><div class="k">R&sup2; vs zero forecast</div></div>
+      <div class="metric"><div class="v">0.260</div><div class="k">Pearson IC</div></div>
+      <div class="metric"><div class="v">77.4%</div><div class="k">Sign accuracy</div></div>
+      <div class="metric warn"><div class="v">0.072</div><div class="k">Ticks captured vs ~0.5 cost</div></div>
+    </div>
+
+    <h4>Predicted against realised</h4>
+    <p class="col small">The obvious chart &mdash; a point per row, predicted on one axis and realised on the other &mdash; does not work here. The mid moves in half-tick steps, so realised values take only <strong>13 distinct levels</strong>, and <strong>85.6% of rows sit exactly on zero</strong>. All 22,361 points would collapse onto thirteen horizontal stripes with almost everything on one of them, which says nothing about the fit.</p>
+    <p class="col small">Binning by prediction and averaging the realised move inside each bin recovers the relationship. Twenty equal-count bins below, each about 1,118 rows, with 95% intervals:</p>
+
+    <div class="plot">
+      <svg viewBox="0 0 380 376" width="100%" style="max-width:420px;height:auto" role="img" aria-label="Predicted against realised move, 20 equal-count bins">
+        <rect x="46" y="14" width="320" height="320" class="pl-panel"/>
+        <line x1="46.0" y1="14" x2="46.0" y2="334" class="pl-grid"/>
+        <line x1="46" y1="334.0" x2="366" y2="334.0" class="pl-grid"/>
+        <text x="46.0" y="350" class="pl-tick" text-anchor="middle">-0.2</text>
+        <text x="39" y="337.0" class="pl-tick" text-anchor="end">-0.2</text>
+        <line x1="126.0" y1="14" x2="126.0" y2="334" class="pl-grid"/>
+        <line x1="46" y1="254.0" x2="366" y2="254.0" class="pl-grid"/>
+        <text x="126.0" y="350" class="pl-tick" text-anchor="middle">-0.1</text>
+        <text x="39" y="257.0" class="pl-tick" text-anchor="end">-0.1</text>
+        <line x1="206.0" y1="14" x2="206.0" y2="334" class="pl-grid0"/>
+        <line x1="46" y1="174.0" x2="366" y2="174.0" class="pl-grid0"/>
+        <text x="206.0" y="350" class="pl-tick" text-anchor="middle">+0.0</text>
+        <text x="39" y="177.0" class="pl-tick" text-anchor="end">+0.0</text>
+        <line x1="286.0" y1="14" x2="286.0" y2="334" class="pl-grid"/>
+        <line x1="46" y1="94.0" x2="366" y2="94.0" class="pl-grid"/>
+        <text x="286.0" y="350" class="pl-tick" text-anchor="middle">+0.1</text>
+        <text x="39" y="97.0" class="pl-tick" text-anchor="end">+0.1</text>
+        <line x1="366.0" y1="14" x2="366.0" y2="334" class="pl-grid"/>
+        <line x1="46" y1="14.0" x2="366" y2="14.0" class="pl-grid"/>
+        <text x="366.0" y="350" class="pl-tick" text-anchor="middle">+0.2</text>
+        <text x="39" y="17.0" class="pl-tick" text-anchor="end">+0.2</text>
+        <line x1="46.0" y1="334.0" x2="366.0" y2="14.0" class="pl-ref"/>
+        <text x="322.0" y="34.0" class="pl-tick">perfect</text>
+        <line x1="57.5" y1="347.9" x2="57.5" y2="308.3" class="pl-err"/>
+        <line x1="104.7" y1="330.1" x2="104.7" y2="289.9" class="pl-err"/>
+        <line x1="124.6" y1="292.1" x2="124.6" y2="256.3" class="pl-err"/>
+        <line x1="139.9" y1="255.2" x2="139.9" y2="222.3" class="pl-err"/>
+        <line x1="152.8" y1="246.7" x2="152.8" y2="217.3" class="pl-err"/>
+        <line x1="163.2" y1="237.1" x2="163.2" y2="205.3" class="pl-err"/>
+        <line x1="172.8" y1="219.3" x2="172.8" y2="190.2" class="pl-err"/>
+        <line x1="181.5" y1="194.6" x2="181.5" y2="164.2" class="pl-err"/>
+        <line x1="189.3" y1="200.7" x2="189.3" y2="171.7" class="pl-err"/>
+        <line x1="196.7" y1="178.8" x2="196.7" y2="154.2" class="pl-err"/>
+        <line x1="203.9" y1="172.5" x2="203.9" y2="146.1" class="pl-err"/>
+        <line x1="211.7" y1="179.3" x2="211.7" y2="144.4" class="pl-err"/>
+        <line x1="220.1" y1="168.4" x2="220.1" y2="138.8" class="pl-err"/>
+        <line x1="229.3" y1="150.6" x2="229.3" y2="119.4" class="pl-err"/>
+        <line x1="238.6" y1="138.3" x2="238.6" y2="108.1" class="pl-err"/>
+        <line x1="248.0" y1="133.2" x2="248.0" y2="101.0" class="pl-err"/>
+        <line x1="258.9" y1="135.3" x2="258.9" y2="103.9" class="pl-err"/>
+        <line x1="271.5" y1="105.1" x2="271.5" y2="72.6" class="pl-err"/>
+        <line x1="286.8" y1="87.4" x2="286.8" y2="53.1" class="pl-err"/>
+        <line x1="328.4" y1="56.8" x2="328.4" y2="18.5" class="pl-err"/>
+        <circle cx="57.5" cy="328.1" r="4" class="pl-dot neg"/>
+        <circle cx="104.7" cy="310.0" r="4" class="pl-dot neg"/>
+        <circle cx="124.6" cy="274.2" r="4" class="pl-dot neg"/>
+        <circle cx="139.9" cy="238.8" r="4" class="pl-dot neg"/>
+        <circle cx="152.8" cy="232.0" r="4" class="pl-dot neg"/>
+        <circle cx="163.2" cy="221.2" r="4" class="pl-dot neg"/>
+        <circle cx="172.8" cy="204.8" r="4" class="pl-dot neg"/>
+        <circle cx="181.5" cy="179.4" r="4" class="pl-dot neg"/>
+        <circle cx="189.3" cy="186.2" r="4" class="pl-dot neg"/>
+        <circle cx="196.7" cy="166.5" r="4" class="pl-dot neg"/>
+        <circle cx="203.9" cy="159.3" r="4" class="pl-dot neg"/>
+        <circle cx="211.7" cy="161.8" r="4" class="pl-dot pos"/>
+        <circle cx="220.1" cy="153.6" r="4" class="pl-dot pos"/>
+        <circle cx="229.3" cy="135.0" r="4" class="pl-dot pos"/>
+        <circle cx="238.6" cy="123.2" r="4" class="pl-dot pos"/>
+        <circle cx="248.0" cy="117.1" r="4" class="pl-dot pos"/>
+        <circle cx="258.9" cy="119.6" r="4" class="pl-dot pos"/>
+        <circle cx="271.5" cy="88.8" r="4" class="pl-dot pos"/>
+        <circle cx="286.8" cy="70.2" r="4" class="pl-dot pos"/>
+        <circle cx="328.4" cy="37.7" r="4" class="pl-dot pos"/>
+        <text x="206" y="372" class="pl-axis" text-anchor="middle">predicted move (ticks)</text>
+        <text x="12" y="174" class="pl-axis" text-anchor="middle" transform="rotate(-90 12 174)">realised move (ticks)</text>
+      </svg>
+    </div>
+
+    <p class="caption col">Dots follow the dashed line closely, so the model is well calibrated: when it says +0.10 ticks, the realised average is close to +0.10. A line fitted through the bins has slope <strong>1.16</strong> &mdash; slightly above 1, meaning the model marginally <em>under</em>-states magnitude, which matches the decile view. Predictions span only &minus;0.46 to +0.35 ticks: this is a small, consistent tilt, never a confident call.</p>
+
+    <div class="decile">
+      <div class="dgrid">
+        <div class="dcol"><div class="dbar neg" style="height:74%"></div></div>
+        <div class="dcol"><div class="dbar neg" style="height:42%"></div></div>
+        <div class="dcol"><div class="dbar neg" style="height:27%"></div></div>
+        <div class="dcol"><div class="dbar neg" style="height:9%"></div></div>
+        <div class="dcol"><div class="dbar neg" style="height:2%"></div></div>
+        <div class="dcol"><div class="dbar pos" style="height:7%"></div></div>
+        <div class="dcol"><div class="dbar pos" style="height:15%"></div></div>
+        <div class="dcol"><div class="dbar pos" style="height:28%"></div></div>
+        <div class="dcol"><div class="dbar pos" style="height:36%"></div></div>
+        <div class="dcol"><div class="dbar pos" style="height:61%"></div></div>
+      </div>
+      <div class="dzero"></div>
+      <div class="dlabels">
+        <span>&minus;.18</span><span>&minus;.10</span><span>&minus;.07</span><span>&minus;.02</span><span>&minus;.00</span>
+        <span>.02</span><span>.04</span><span>.07</span><span>.09</span><span>.15</span>
+      </div>
+      <p class="caption">Mean realised move in ticks per decile of <em>predicted</em> move. Monotone across all ten groups.</p>
+    </div>
+
+    <p class="col small"><strong>Why this matters more than R&sup2;.</strong> It tests <em>ranking</em>, not magnitude. The model systematically under-predicts size &mdash; its most bullish decile forecasts 0.13 ticks and realises 0.15 &mdash; but it puts the rows in the right order, and order is what a trading signal is used for: you act on the strongest conviction, not on the literal number. A model with a poor R&sup2; but a clean monotone profile is still useful; a model with a decent R&sup2; and a jagged profile usually is not.</p>
+
+    <p class="col small">The captured 0.072 ticks against a ~0.5 tick crossing cost is the honest limit: a real predictive relationship, not a strategy.</p>
+  </section>
+
+  <footer>
+    1,180,065 updates &middot; 5 days &middot; 18 source files &middot; 79 tests &middot; 10 features
+  </footer>
+
+</div>
